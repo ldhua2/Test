@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangzhixuan.mapper.EmpMapper">
+	
+	<resultMap type="com.wangzhixuan.model.Emp" id="EmpResultMap">
+		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="dept" property="dept"/>
+		<result column="job" property="job"/>
+		<result column="age" property="age"/>
+		<result column="sex" property="sex"/>
+		<result column="height" property="height"/>
+		<result column="phone" property="phone"/>
+		<result column="emp_Type" property="empType"/>
+		<result column="status" property="status"/>
+		<result column="create_time" property="createTime"/>		
+	</resultMap>
+	
+	<sql id="base_column_list">
+		id,name,dept,job,age,sex,height,phone,emp_Type AS empType, status, create_time AS createTime 
+	</sql>
+	
+	<select id="selectEmpPage" resultMap="EmpResultMap">
+		SELECT 
+			<include refid="base_column_list"/>
+		FROM 
+			emp 
+		<where>
+			<if test="name != null ">
+				name = #{name}
+			</if>
+			<if test="createTime !=null ">
+				<![CDATA[and createTime >= #{createTime}]]>
+			</if>
+		</where>
+	</select>
+	
+	<insert id="insertAll" parameterType="java.lang.String">
+		INSERT INTO emp (name, dept, job, age, sex, height,phone, emp_Type, status, create_time) 
+		VALUES 
+		(#{string});
+	</insert>
+	
+	<!-- <insert id="insertAll" parameterType="java.util.List">
+		INSERT INTO emp ( `name`, dept, job, age, sex, height, emp_Type, `status`, phone, create_time) 
+		VALUES 
+		<foreach collection="list" item="obj" index="index" separator=",">
+			(obj)
+		</foreach>
+	</insert> -->
+	
+</mapper>
